@@ -5,16 +5,13 @@ const { Category, Product } = require('../../models');
 router.get('/', (req, res) => {
   Category.findAll({
     include: [
-      {
-        models: Product,
-        attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
-      }
+      Product
     ]
-    .then(dbCategoryData => res.json(dbCategoryData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    })
+  })
+  .then(dbCategoryData => res.json(dbCategoryData))
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
   });
 });
 
@@ -25,22 +22,19 @@ router.get('/:id', (req, res) => {
       id: req.params.id
     },
     include: [
-      {
-        models: Product,
-        attributes: ['id', 'poduct_name', 'price', 'stock', 'category_id']
-      }
+      Product
     ]
-    .then(dbCategoryData => {
-      if (!dbCategoryData) {
-        res.status(404).json({ message: 'No Category Found By This Id'});
-        return;
-      }
-      res.json(dbCategoryData);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(404).json(err);
-    })
+  })
+  .then(dbCategoryData => {
+    if (!dbCategoryData) {
+      res.status(404).json({ message: 'No Category Found By This Id'});
+      return;
+    }
+    res.json(dbCategoryData);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json(err);
   });
 });
 
@@ -81,12 +75,12 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   Category.destroy({
     where: {
-      idd: req.params.id
+      id: req.params.id
     }
   })
     .then(dbCategoryData => {
       if (!dbCategoryData) {
-        res.status(404).json({ message: 'No Category Found By This Id'});
+        res.status(404).json({ message: 'No Category Found By This Id' });
         return;
       }
       res.json(dbCategoryData);
