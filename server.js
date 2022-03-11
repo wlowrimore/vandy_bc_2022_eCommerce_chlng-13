@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require('./vandy_bc_2022_eCommerce_chlng-13/Develop/routes');
+const routes = require('./routes');
 const sequelize = require('./config/connection');
 
 // import sequelize connection
