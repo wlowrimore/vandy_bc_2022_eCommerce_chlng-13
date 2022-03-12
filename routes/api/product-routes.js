@@ -2,8 +2,15 @@ const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // get all products
-router.get('/', (req, res) => {
-  Product.findAll()
+router.get('/', (_req, res) => {
+  Product.findAll({
+    include: [
+      {
+        model: Category, 
+        model: Tag,
+      },
+    ]
+  })
     .then(dbProductData => res.json(dbProductData))
     .catch(err => {
       console.log(err);
@@ -16,7 +23,18 @@ router.get('/:id', (req, res) => {
   Product.findOne({
     where: {
       id: req.params.id
-    }
+    },
+    attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+    include: [
+      {
+        model: Category,
+        attributes: ['id', 'category_name']
+      },
+      {
+        model: Tag,
+        attributes: ['id', 'tag_name']
+      }
+    ]
   })
   .then(dbProductData => {
     if (!dbProductData) {
@@ -35,7 +53,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   Product.create(req.body)
     .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
+      // look for product tags and include in bulk create
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
@@ -53,6 +71,7 @@ router.post('/', (req, res) => {
       res.status(400).json(err);
     });
 });
+  
 
 // update product
 router.put('/:id', (req, res) => {
@@ -61,14 +80,13 @@ router.put('/:id', (req, res) => {
       id: req.params.id,
     },
   })
-    .then((product) => {
-      // find all associated tags from ProductTag
+    .then((_product) => {
+      // find all related tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
     .then((productTags) => {
-      // get list of current tag_ids
       const productTagIds = productTags.map(({ tag_id }) => tag_id);
-      // create filtered list of new tag_ids
+
       const newProductTags = req.body.tagIds
         .filter((tag_id) => !productTagIds.includes(tag_id))
         .map((tag_id) => {
@@ -77,25 +95,23 @@ router.put('/:id', (req, res) => {
             tag_id,
           };
         });
-      // figure out which ones to remove
-      const productTagsToRemove = productTags
+      const productTagsToRemove = product_tag
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
 
-      // run both actions
       return Promise.all([
         ProductTag.destroy({ where: { id: productTagsToRemove } }),
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
+    .then((newProductTags) => res.json(newProductTags))
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
       res.status(400).json(err);
     });
 });
 
-// delete one product by its `id` value
+// delete single product
 router.delete('/:id', (req, res) => {
   Product.destroy({
     where: {
