@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-
-  
-=======
->>>>>>> 1df69c81c2aad51ac5a49ddc5bc5fc3647e7f81d
-# (ORM) e-Commerce Back End
-
 ![badge](https://img.shields.io/badge/license-MIT-purple)<br />
 
 ## Description
@@ -48,10 +41,3 @@ This is the back-end that could be used for an e-commerce platform (website). I'
   See all of my projects on my GitHub page: https://github.com/wlowrimore
 
   Contact me at my LinkedIn page: http://www.linkedin.com/in/william-lowrimore-21778310
-
-<<<<<<< HEAD
-  You can also email me at: wlowrimore@gmail.com
-    
-=======
-  You can also email me at: wlowrimore@gmail.com# vandy_bc_2022_eCommerce_chlng-13
->>>>>>> 1df69c81c2aad51ac5a49ddc5bc5fc3647e7f81d
