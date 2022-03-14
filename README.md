@@ -1,3 +1,5 @@
+# (ORM) e-Commerce Back End
+
 ![badge](https://img.shields.io/badge/license-MIT-purple)<br />
 
 ## Description
@@ -41,3 +43,6 @@ This is the back-end that could be used for an e-commerce platform (website). I'
   See all of my projects on my GitHub page: https://github.com/wlowrimore
 
   Contact me at my LinkedIn page: http://www.linkedin.com/in/william-lowrimore-21778310
+
+  You can also email me at: wlowrimore@gmail.com
+    
